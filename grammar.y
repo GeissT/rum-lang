@@ -65,7 +65,7 @@ rule
   | Assign
   | Def
   | Class
-  | Ifi
+  | If
   | While
   | '(' Expression ')'    { result = val[1] }
   ;
@@ -157,6 +157,7 @@ rule
   # while block
   While:
     WHILE Expression Block        { result = WhileNode.new(val[1], val[2])  }
+  ;
   
   # A block of indented code. You see here that all the hard work was done by the
   # lexer.
