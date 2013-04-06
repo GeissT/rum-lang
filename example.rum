@@ -3,6 +3,6 @@ class Rum:
     "yeah!"
 
 rum_object = Rum.new
-if rum_object:
+while rum_object:
   print("rum_object.does_it_work = ")
   print(rum_object.does_it_work)
