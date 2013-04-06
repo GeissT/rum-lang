@@ -2,6 +2,7 @@ class Parser
 
 # Declare tokens produced by the lexer
 token IF ELSE
+token WHILE
 token DEF
 token CLASS
 token NEWLINE
@@ -64,7 +65,8 @@ rule
   | Assign
   | Def
   | Class
-  | If
+  | Ifi
+  | While
   | '(' Expression ')'    { result = val[1] }
   ;
   
@@ -116,6 +118,7 @@ rule
   | Expression '-' Expression     { result = CallNode.new(val[0], val[1], [val[2]]) }
   | Expression '*' Expression     { result = CallNode.new(val[0], val[1], [val[2]]) }
   | Expression '/' Expression     { result = CallNode.new(val[0], val[1], [val[2]]) }
+  | Expression '!' Expression     { result = CallNode.new(val[1], val[0], [])       }
   ;
   
   Constant:
@@ -150,6 +153,10 @@ rule
   If:
     IF Expression Block           { result = IfNode.new(val[1], val[2]) }
   ;
+
+  # while block
+  While:
+    WHILE Expression Block        { result = WhileNode.new(val[1], val[2])  }
   
   # A block of indented code. You see here that all the hard work was done by the
   # lexer.

@@ -12,7 +12,7 @@ Runtime = Context.new(object_class.new)
 
 Runtime["Class"] = rum_class 
 Runtime["Object"] = object_class
-Runtime["Number"] = RumClass.new
+Runtime["Number"] = RumClass.new(Runtime["Object"])
 Runtime["String"] = RumClass.new
 
 # Everything is an object, even true, false and nil. So they need
@@ -38,4 +38,9 @@ end
 Runtime["Object"].runtime_methods["print"] = proc do |receiver, arguments|
   puts arguments.first.ruby_value
   Runtime["nil"]
+end
+
+Runtime["Number"].runtime_methods["+"] = proc do |receiver, arguments|
+    result = receiver.ruby_value + arguments.first.ruby_value
+    Runtime["Number"].new_with_value(result)
 end
