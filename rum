@@ -5,7 +5,7 @@
 #   ./rum example.rum # to eval a file
 #   ./rum             # to start the REPL
 #
-# on Windows run with: ruby awesome [options]
+# on Windows run with: ruby rum [options]
 
 $:.unshift "." # Fix for Ruby 1.9
 require "interpreter"
