@@ -4,7 +4,7 @@ class Lexer
   def tokenize(code)
     # Cleanup code by remove extra line breaks
     code.chomp!
-    
+        
     # Current character position we're parsing
     i = 0
     
