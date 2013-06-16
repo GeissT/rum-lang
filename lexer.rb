@@ -4,7 +4,7 @@ class Lexer
   def tokenize(code)
     # Cleanup code by remove extra line breaks
     code.chomp!
-        
+
     # Current character position we're parsing
     i = 0
     
@@ -30,25 +30,25 @@ class Lexer
         # in an [:IF, "if"] token
         if KEYWORDS.include?(identifier)
           tokens << [identifier.upcase.to_sym, identifier]
-        # Non-keyword identifiers include method and variable names.
+      # Non-keyword identifiers include method and variable names.
         else
           tokens << [:IDENTIFIER, identifier]
         end
-        # skip what we just parsed
-        i += identifier.size
-      
+      # skip what we just parsed
+      i += identifier.size
+
       # Matching class names and constants starting with a capital letter.
-      elsif constant = chunk[/\A([A-Z]\w*)/, 1]
-        tokens << [:CONSTANT, constant]
-        i += constant.size
-        
-      elsif number = chunk[/\A([0-9]+)/, 1]
-        tokens << [:NUMBER, number.to_i]
-        i += number.size
-        
-      elsif string = chunk[/\A"(.*?)"/, 1]
-        tokens << [:STRING, string]
-        i += string.size + 2
+    elsif constant = chunk[/\A([A-Z]\w*)/, 1]
+      tokens << [:CONSTANT, constant]
+      i += constant.size
+
+    elsif number = chunk[/\A([0-9]+)/, 1]
+      tokens << [:NUMBER, number.to_i]
+      i += number.size
+
+    elsif string = chunk[/\A"(.*?)"/, 1]
+      tokens << [:STRING, string]
+      i += string.size + 2
       
       # Here's the indentation magic!
       #
@@ -65,14 +65,14 @@ class Lexer
         # When we create a new block we expect the indent level to go up.
         if indent.size <= current_indent
           raise "Bad indent level, got #{indent.size} indents, " +
-                "expected > #{current_indent}"
+          "expected > #{current_indent}"
         end
         # Adjust the current indentation level.
         current_indent = indent.size
         indent_stack.push(current_indent)
         tokens << [:INDENT, indent.size]
         i += indent.size + 2
-  
+
       # This elsif takes care of the two last cases:
       # Case 2: We stay in the same block if the indent level (number of spaces) is the
       #         same as current_indent.
@@ -93,28 +93,28 @@ class Lexer
           raise "Missing ':'"
         end
         i += indent.size + 1
-      
-      # Match long operators such as ||, &&, ==, !=, <= and >=.
-      # One character long operators are matched by the catch all `else` at the bottom.
-      elsif operator = chunk[/\A(\|\||&&|==|!=|<=|>=)/, 1]
-        tokens << [operator, operator]
-        i += operator.size
-      
+
+    # Match long operators such as ||, &&, ==, !=, <= and >=.
+    # One character long operators are matched by the catch all `else` at the bottom.
+  elsif operator = chunk[/\A(\|\||&&|==|!=|<=|>=)/, 1]
+    tokens << [operator, operator]
+    i += operator.size
+    
       # Ignore whitespace
-      elsif chunk.match(/\A /)
-        i += 1
+    elsif chunk.match(/\A /)
+      i += 1
       
       # Catch all single characters
       # We treat all other single characters as a token. Eg.: ( ) , . ! + - <
-      else
-        value = chunk[0,1]
-        tokens << [value, value]
-        i += 1
-        
-      end
-      
+    else
+      value = chunk[0,1]
+      tokens << [value, value]
+      i += 1
+
     end
-    
+
+  end
+
     # Close all open blocks
     while indent = indent_stack.pop
       tokens << [:DEDENT, indent_stack.first || 0]
