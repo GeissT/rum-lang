@@ -31,9 +31,9 @@ class Lexer
         if KEYWORDS.include?(identifier)
           tokens << [identifier.upcase.to_sym, identifier]
       # Non-keyword identifiers include method and variable names.
-        else
-          tokens << [:IDENTIFIER, identifier]
-        end
+    else
+      tokens << [:IDENTIFIER, identifier]
+    end
       # skip what we just parsed
       i += identifier.size
 
